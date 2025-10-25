@@ -1,0 +1,54 @@
+# CAPMeme Configuration - Optimized for GPU Training with 10K Images
+model:
+  name: "CAPMeme"
+  vision_encoder: "clip"  # Options: clip, blip
+  text_encoder: "bert"   # Options: bert, llama
+  embedding_dim: 512
+  hidden_dim: 256
+  num_classes: 4  # sarcastic, persuasive, harmful, neutral
+  
+# Dataset configuration - Optimized for 10K images
+data:
+  dataset_name: "meme_dataset_10k"
+  image_size: 224
+  max_text_length: 128
+  batch_size: 64  # Increased for GPU efficiency
+  num_workers: 8  # Increased for faster data loading
+  train_split: 0.8  # 8000 training samples
+  val_split: 0.1    # 1000 validation samples
+  test_split: 0.1   # 1000 test samples
+  
+# Training configuration - Optimized for large dataset
+training:
+  epochs: 100  # Increased for better convergence
+  learning_rate: 2e-4  # Slightly higher for faster convergence
+  weight_decay: 1e-5
+  warmup_steps: 2000  # Increased warmup for large dataset
+  gradient_clip_norm: 1.0
+  save_every: 10  # Save less frequently
+  eval_every: 2   # Evaluate more frequently
+  
+# Contrastive Affective Pretraining
+cap:
+  temperature: 0.07
+  contrastive_weight: 0.5
+  affective_weight: 0.3
+  knowledge_weight: 0.2
+  
+# Knowledge Graph
+knowledge_graph:
+  use_conceptnet: true
+  use_comet: true
+  kg_embedding_dim: 200
+  max_relations: 10
+  
+# Evaluation
+evaluation:
+  metrics: ["accuracy", "f1", "auroc"]
+  save_predictions: true
+  
+# Logging
+logging:
+  use_wandb: true
+  project_name: "capmeme-10k"
+  log_every: 50  # Log more frequently for large dataset
